@@ -34,8 +34,8 @@ az group create --name rg-truewealth --location eastus
 # App Service plan (B1 or higher for always-on)
 az appservice plan create --name plan-truewealth --resource-group rg-truewealth --is-linux --sku B1
 
-# Web app (Node 20)
-az webapp create --name truewealth --resource-group rg-truewealth --plan plan-truewealth --runtime "NODE:20-lts"
+# Web app (Node 24)
+az webapp create --name truewealth --resource-group rg-truewealth --plan plan-truewealth --runtime "NODE:24-lts"
 
 # PostgreSQL
 az postgres flexible-server create --resource-group rg-truewealth --name pg-truewealth --location eastus --admin-user pgadmin --admin-password "YourSecurePassword123!" --sku-name Standard_B1ms --tier Burstable --version 15

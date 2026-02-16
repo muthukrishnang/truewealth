@@ -11,7 +11,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: truwealth
-  NODE_VERSION: "20"
+  NODE_VERSION: "24"
 
 jobs:
   build:
@@ -27,7 +27,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
+          # No cache: repo has no package-lock.json; omit cache so setup-node doesn't require a lock file
 
       - name: Install dependencies
         run: if [ -f package-lock.json ]; then npm ci; else npm install; fi
