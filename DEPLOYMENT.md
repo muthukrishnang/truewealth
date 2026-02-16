@@ -42,7 +42,17 @@ az postgres flexible-server create --resource-group rg-truewealth --name pg-true
 az postgres flexible-server db create --resource-group rg-truewealth --server-name pg-truewealth --database-name truewealth
 ```
 
-### 3. Configure App Settings
+### 3. Set startup command (required for Next.js)
+
+Azure must run your app instead of the default static site. In Azure Portal → your Web App → **Configuration** → **General settings** → **Startup Command**, set:
+
+```bash
+npm start
+```
+
+Save (and restart the app if needed). This runs `next start` so the deployed app serves correctly.
+
+### 4. Configure App Settings
 
 In Azure Portal → your Web App → Configuration → Application settings, add:
 
@@ -54,7 +64,7 @@ In Azure Portal → your Web App → Configuration → Application settings, add
 
 For **SQLite** (not recommended for production): use a path under `/home` so it persists, e.g. `file:/home/LogFiles/dev.db`, and ensure the app has write access.
 
-### 4. Deploy code
+### 5. Deploy code
 
 **Option A – End-to-end pipeline (recommended)**  
 The repo includes a **full CI/CD workflow** that on every push to `main`:
@@ -81,7 +91,7 @@ npx prisma generate
 # Then use "Deploy to Web App" from VS Code Azure extension or Azure DevOps pipeline
 ```
 
-### 5. Run migrations
+### 6. Run migrations
 
 Migrations are run **in the GitHub Actions pipeline** before each deploy (`npx prisma migrate deploy`). No need to run them manually on the server. For the first deploy, ensure `DATABASE_URL` is set in GitHub secrets so the pipeline can apply the initial migration.
 
