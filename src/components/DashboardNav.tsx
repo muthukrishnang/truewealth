@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import {
@@ -59,9 +60,11 @@ export function DashboardNav({
         <div className="flex items-center gap-2">
           <span className="hidden text-sm text-slate-400 md:inline">{user.email}</span>
           {user.image && (
-            <img
+            <Image
               src={user.image}
               alt=""
+              width={32}
+              height={32}
               className="h-8 w-8 rounded-full border border-slate-600"
             />
           )}
@@ -75,6 +78,7 @@ export function DashboardNav({
           </button>
           <button
             type="button"
+            aria-label="Toggle menu"
             className="md:hidden rounded-lg p-2 text-slate-400 hover:bg-slate-800"
             onClick={() => setOpen((o) => !o)}
           >

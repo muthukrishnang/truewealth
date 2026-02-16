@@ -5,7 +5,7 @@ import { toBase } from "@/lib/fx";
 import Link from "next/link";
 import { Wallet, Target, TrendingUp, ArrowRight } from "lucide-react";
 import { SnapshotButton } from "@/components/SnapshotButton";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import { NetWorthChart } from "@/components/NetWorthChart";
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
@@ -61,21 +61,7 @@ export default async function DashboardPage() {
       {chartData.length > 0 && (
         <div className="rounded-2xl border border-slate-700/50 bg-slate-800/50 p-6">
           <h2 className="text-lg font-semibold text-white">Net worth over time</h2>
-          <div className="mt-4 h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                <XAxis dataKey="date" stroke="#94a3b8" fontSize={12} />
-                <YAxis stroke="#94a3b8" fontSize={12} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
-                <Tooltip
-                  contentStyle={{ backgroundColor: "#1e293b", border: "1px solid #334155" }}
-                  labelStyle={{ color: "#f1f5f9" }}
-                  formatter={(value: number) => [value.toLocaleString(undefined, { maximumFractionDigits: 0 }), "Value"]}
-                />
-                <Line type="monotone" dataKey="value" stroke="#0ea5e9" strokeWidth={2} dot={false} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
+          <NetWorthChart data={chartData} />
         </div>
       )}
 
