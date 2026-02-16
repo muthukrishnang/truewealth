@@ -1,0 +1,17 @@
+# Local PostgreSQL for development. Use with DATABASE_URL below.
+# Run: docker compose up -d
+# Then: npx prisma migrate deploy  (or  npx prisma db push  for quick sync)
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: truewealth
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
