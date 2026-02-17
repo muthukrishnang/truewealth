@@ -52,11 +52,26 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
+      - name: Prepare deployment package
+        run: |
+          mkdir -p deploy
+          cp -r .next deploy/
+          cp -r node_modules deploy/
+          cp -r prisma deploy/
+          cp -r src deploy/
+          cp package.json package-lock.json next.config.js tsconfig.json next-env.d.ts postcss.config.js tailwind.config.ts deploy/ 2>/dev/null || true
+          [ -f package-lock.json ] && cp package-lock.json deploy/
+          [ -d public ] && cp -r public deploy/
+          echo "Deploy package:"
+          ls -la deploy
+          echo ".next (build output):"
+          ls -la deploy/.next
+
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .
+          path: deploy
 
   deploy:
     runs-on: ubuntu-latest
