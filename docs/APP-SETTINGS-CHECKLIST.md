@@ -4,6 +4,19 @@ Your app needs these in **Azure Portal → Web App (truwealth) → Configuration
 
 ---
 
+## Custom domain (truwealth.org) – sign-in checklist
+
+If you use **https://truwealth.org** as your app URL:
+
+1. **Azure App Service → Configuration → Application settings:** set **NEXTAUTH_URL** = `https://truwealth.org` (no trailing slash).
+2. **Google Cloud Console → Credentials → your OAuth 2.0 Client:**
+   - **Authorized JavaScript origins:** add `https://truwealth.org`
+   - **Authorized redirect URIs:** add `https://truwealth.org/api/auth/callback/google`
+3. **Authorized domains** (OAuth consent screen): add `truwealth.org` if prompted.
+4. Save all settings and restart the Web App if needed.
+
+---
+
 ## 0. Startup command (required)
 
 The app is deployed as a **standalone** bundle. In **Configuration → General settings → Startup Command** set:
@@ -30,10 +43,11 @@ In **Configuration → Application settings**, add any that are missing:
 ## 2. NEXTAUTH_URL
 
 - **Name:** `NEXTAUTH_URL`
-- **Value:** Your app’s public URL (no trailing slash):
+- **Value:** Your app’s public URL (no trailing slash). Use your **custom domain** if you have one:
   ```
-  https://truwealth.azurewebsites.net
+  https://truwealth.org
   ```
+  (If not using a custom domain: `https://truwealth.azurewebsites.net`)
 
 ---
 
@@ -85,7 +99,7 @@ You need a **Google OAuth 2.0 Web application** client and its Client ID + Clien
    **App domain** (optional; you can skip and click **Save and Continue**)
    | Field | What to enter |
    |-------|-------------------------------|
-   | **Application home page** | `https://truwealth.azurewebsites.net` |
+   | **Application home page** | `https://truwealth.org` (or your custom domain) |
    | **Application privacy policy link** | Leave blank or add a URL to your privacy policy. |
    | **Application terms of service link** | Leave blank or add a URL to your terms. |
 
@@ -106,12 +120,18 @@ You need a **Google OAuth 2.0 Web application** client and its Client ID + Clien
 2. **+ Create credentials** → **OAuth client ID**.
 3. **Application type:** **Web application**.
 4. **Name:** e.g. `TrueWealth Production`.
-5. **Authorized redirect URIs** → **+ Add URI** and add exactly:
+5. **Authorized JavaScript origins** → **+ Add URI** (required for sign-in to work):
    ```
-   https://truwealth.azurewebsites.net/api/auth/callback/google
+   https://truwealth.org
    ```
-6. **Create**.
-7. In the popup you’ll see **Client ID** and **Client secret**. Copy both (you can also open the client later from Credentials to see the secret again).
+   Add `https://truwealth.azurewebsites.net` too if you still use the default Azure URL.
+6. **Authorized redirect URIs** → **+ Add URI** and add exactly:
+   ```
+   https://truwealth.org/api/auth/callback/google
+   ```
+   Add `https://truwealth.azurewebsites.net/api/auth/callback/google` too if you use that URL.
+7. **Create**.
+8. In the popup you’ll see **Client ID** and **Client secret**. Copy both (you can also open the client later from Credentials to see the secret again).
 
 ### Step 5: Add them in Azure
 
@@ -128,7 +148,7 @@ You need a **Google OAuth 2.0 Web application** client and its Client ID + Clien
 | Name               | Where to get it |
 |--------------------|------------------|
 | `DATABASE_URL`     | Your PostgreSQL connection string (you have this). |
-| `NEXTAUTH_URL`     | `https://truwealth.azurewebsites.net` |
+| `NEXTAUTH_URL`     | `https://truwealth.org` (or your custom domain; no trailing slash) |
 | `NEXTAUTH_SECRET`  | Generate: `openssl rand -base64 32` |
 | `GOOGLE_CLIENT_ID` | Google Cloud Console → Credentials → OAuth 2.0 Client ID |
 | `GOOGLE_CLIENT_SECRET` | Same OAuth client → Client secret |
