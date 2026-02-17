@@ -56,9 +56,15 @@ jobs:
         run: |
           # Next.js standalone: server.js + .next + node_modules
           cp -r .next/static .next/standalone/.next/
-          # Azure often skips dot-prefixed dirs when extracting zip; use next_build then symlink at runtime
+          # Azure often skips dot-prefixed dirs; use next_build and prisma_generated, restore at runtime
           mv .next/standalone/.next .next/standalone/next_build
-          printf '%s\n' '#!/bin/sh' 'cd "$(dirname "$0")"' '[ -d next_build ] && [ ! -L .next ] && [ ! -d .next ] && ln -sfn next_build .next' 'exec node server.js' > .next/standalone/start.sh
+          cp -r node_modules/.prisma .next/standalone/prisma_generated
+          printf '%s\n' \
+            '#!/bin/sh' \
+            'cd "$(dirname "$0")"' \
+            '[ -d next_build ] && [ ! -L .next ] && [ ! -d .next ] && ln -sfn next_build .next' \
+            'if [ -d prisma_generated ] && [ ! -d node_modules/.prisma ]; then mkdir -p node_modules && cp -r prisma_generated node_modules/.prisma; fi' \
+            'exec node server.js' > .next/standalone/start.sh
           chmod +x .next/standalone/start.sh
           node -e "
             const fs = require('fs');
@@ -71,6 +77,7 @@ jobs:
           ls -la .next/standalone
           test -f .next/standalone/server.js && echo "server.js OK" || (echo "Missing server.js" && exit 1)
           test -d .next/standalone/next_build && echo "next_build OK" || (echo "Missing next_build" && exit 1)
+          test -d .next/standalone/prisma_generated && echo "prisma_generated OK" || (echo "Missing prisma_generated" && exit 1)
           test -f .next/standalone/start.sh && echo "start.sh OK" || (echo "Missing start.sh" && exit 1)
 
       - name: Upload artifact for deployment
