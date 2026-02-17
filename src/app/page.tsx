@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { ArrowRight, Shield, PieChart, Target, TrendingUp } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 export default function HomePage() {
   return (
     <div className="min-h-screen">
       <nav className="border-b border-slate-700/50 bg-slate-900/50 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-          <span className="text-xl font-semibold text-white">TrueWealth</span>
+          <Logo size="md" />
           <Link
             href="/login"
             className="rounded-lg bg-sky-500 px-4 py-2 text-sm font-medium text-white hover:bg-sky-600"

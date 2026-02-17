@@ -3,6 +3,7 @@
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { Logo } from "@/components/Logo";
 
 function LoginContent() {
   const searchParams = useSearchParams();
@@ -11,8 +12,10 @@ function LoginContent() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center px-4">
       <div className="w-full max-w-sm rounded-2xl border border-slate-700/50 bg-slate-800/50 p-8 shadow-xl">
-        <h1 className="text-center text-2xl font-bold text-white">TrueWealth</h1>
-        <p className="mt-2 text-center text-slate-400">Sign in to know your true wealth</p>
+        <div className="flex justify-center">
+          <Logo size="lg" />
+        </div>
+        <p className="mt-4 text-center text-slate-400">Sign in to know your true wealth</p>
         <button
           type="button"
           onClick={() => signIn("google", { callbackUrl })}

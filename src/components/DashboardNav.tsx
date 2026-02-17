@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { Logo } from "@/components/Logo";
 import { signOut } from "next-auth/react";
 import {
   LayoutDashboard,
@@ -35,8 +36,8 @@ export function DashboardNav({
   return (
     <header className="sticky top-0 z-50 border-b border-slate-700/50 bg-slate-900/80 backdrop-blur">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
-        <Link href="/dashboard" className="text-lg font-semibold text-white">
-          TrueWealth
+        <Link href="/dashboard" className="flex items-center">
+          <Logo size="sm" />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">

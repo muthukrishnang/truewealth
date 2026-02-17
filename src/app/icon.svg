@@ -1,0 +1,18 @@
+<svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shield base with gradient -->
+  <path d="M20 4L6 10v10c0 8 6 14 14 16 8-2 14-8 14-16V10L20 4z" fill="url(#fav-grad)"/>
+  <!-- Inner shield cutout for depth -->
+  <path d="M20 7.5L8.5 12.5v8c0 6.5 4.8 11.5 11.5 13.2 6.7-1.7 11.5-6.7 11.5-13.2v-8L20 7.5z" fill="url(#fav-inner)" fill-opacity="0.4"/>
+  <!-- Stylized W = growth line (wealth rising) -->
+  <path d="M12 24l4-8 4 5 4-5 4 8" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <defs>
+    <linearGradient id="fav-grad" x1="20" y1="4" x2="20" y2="36" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0ea5e9"/>
+      <stop offset="1" stop-color="#0369a1"/>
+    </linearGradient>
+    <linearGradient id="fav-inner" x1="20" y1="7" x2="20" y2="28" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e0f2fe"/>
+    </linearGradient>
+  </defs>
+</svg>

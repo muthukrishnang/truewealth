@@ -5,6 +5,13 @@ import { Providers } from "./providers";
 export const metadata: Metadata = {
   title: "TrueWealth | Know Your True Wealth",
   description: "Privacy-first net worth tracker. Track assets, goals, expenses & inflation.",
+  icons: {
+    icon: "/icon.svg",
+  },
+  openGraph: {
+    title: "TrueWealth | Know Your True Wealth",
+    description: "Privacy-first net worth tracker. Track assets, goals, expenses & inflation.",
+  },
 };
 
 export default function RootLayout({
