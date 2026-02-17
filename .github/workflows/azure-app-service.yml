@@ -54,11 +54,20 @@ jobs:
 
       - name: Prepare standalone deployment package
         run: |
-          # Next.js standalone: self-contained bundle, avoids Azure node_modules/.next issues
+          # Next.js standalone: self-contained bundle (server.js + .next + node_modules)
           cp -r .next/static .next/standalone/.next/
+          # Azure Oryx runs "npm start" by default; make it run node server.js
+          node -e "
+            const fs = require('fs');
+            const p = JSON.parse(fs.readFileSync('.next/standalone/package.json', 'utf8'));
+            p.scripts = p.scripts || {};
+            p.scripts.start = 'node server.js';
+            fs.writeFileSync('.next/standalone/package.json', JSON.stringify(p, null, 2));
+          "
           echo "Standalone package contents:"
           ls -la .next/standalone
           ls -la .next/standalone/.next
+          grep -A2 '"scripts"' .next/standalone/package.json || true
           test -f .next/standalone/server.js && echo "server.js OK" || (echo "Missing server.js" && exit 1)
           test -d .next/standalone/.next && echo ".next OK" || (echo "Missing .next" && exit 1)
 
