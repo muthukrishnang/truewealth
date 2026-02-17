@@ -3,7 +3,6 @@ import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "./prisma";
 
 export const authOptions: NextAuthOptions = {
-  trustHost: true,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
