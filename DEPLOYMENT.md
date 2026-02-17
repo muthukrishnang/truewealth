@@ -42,15 +42,15 @@ az postgres flexible-server create --resource-group rg-truewealth --name pg-true
 az postgres flexible-server db create --resource-group rg-truewealth --server-name pg-truewealth --database-name truewealth
 ```
 
-### 3. Set startup command (required for Next.js)
+### 3. Set startup command (required)
 
-Azure must run your app instead of the default static site. In Azure Portal → your Web App → **Configuration** → **General settings** → **Startup Command**, set:
+The app is deployed as a Next.js **standalone** bundle. Azure must run it explicitly. In Azure Portal → your Web App → **Configuration** → **General settings** → **Startup Command**, set:
 
 ```bash
-npm start
+node server.js
 ```
 
-Save (and restart the app if needed). This runs `next start` so the deployed app serves correctly.
+Save (and restart the app if needed). Do not use `npm start`—the deployed package uses `server.js` from the standalone output.
 
 ### 4. Configure App Settings
 

@@ -1,10 +1,26 @@
 # Azure App Service – Application settings checklist
 
-Your app needs these in **Azure Portal → Web App (truwealth) → Configuration → Application settings**. Add any that are missing.
+Your app needs these in **Azure Portal → Web App (truwealth) → Configuration**.
 
 ---
 
-## 1. DATABASE_URL ✅ (you have this)
+## 0. Startup command (required)
+
+The app is deployed as a **standalone** bundle. In **Configuration → General settings → Startup Command** set:
+
+```bash
+node server.js
+```
+
+Save and restart. Do **not** use `npm start`.
+
+---
+
+## 1. Application settings
+
+In **Configuration → Application settings**, add any that are missing:
+
+### 1. DATABASE_URL ✅ (you have this)
 
 - **Name:** `DATABASE_URL`
 - **Value:** Your PostgreSQL connection string (already set).

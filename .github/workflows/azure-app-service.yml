@@ -1,6 +1,6 @@
-# Build, run DB migrations, and deploy to Azure Web App (main branch)
+# Build, run DB migrations, and deploy to Azure Web App (main branch).
+# Uses Next.js "standalone" output; Azure startup command must be: node server.js
 # Uses Azure OIDC / service principal secrets created when you connected GitHub in Azure.
-# Docs: https://github.com/Azure/webapps-deploy | https://github.com/Azure/actions
 
 name: Build, migrate DB, and deploy to Azure Web App - truwealth
 
@@ -52,26 +52,21 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Prepare deployment package
+      - name: Prepare standalone deployment package
         run: |
-          mkdir -p deploy
-          cp -r .next deploy/
-          cp -r node_modules deploy/
-          cp -r prisma deploy/
-          cp -r src deploy/
-          cp package.json package-lock.json next.config.js tsconfig.json next-env.d.ts postcss.config.js tailwind.config.ts deploy/ 2>/dev/null || true
-          [ -f package-lock.json ] && cp package-lock.json deploy/
-          [ -d public ] && cp -r public deploy/
-          echo "Deploy package:"
-          ls -la deploy
-          echo ".next (build output):"
-          ls -la deploy/.next
+          # Next.js standalone: self-contained bundle, avoids Azure node_modules/.next issues
+          cp -r .next/static .next/standalone/.next/
+          echo "Standalone package contents:"
+          ls -la .next/standalone
+          ls -la .next/standalone/.next
+          test -f .next/standalone/server.js && echo "server.js OK" || (echo "Missing server.js" && exit 1)
+          test -d .next/standalone/.next && echo ".next OK" || (echo "Missing .next" && exit 1)
 
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: deploy
+          path: .next/standalone
 
   deploy:
     runs-on: ubuntu-latest
