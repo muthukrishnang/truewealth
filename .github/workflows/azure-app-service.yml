@@ -54,22 +54,24 @@ jobs:
 
       - name: Prepare standalone deployment package
         run: |
-          # Next.js standalone: self-contained bundle (server.js + .next + node_modules)
+          # Next.js standalone: server.js + .next + node_modules
           cp -r .next/static .next/standalone/.next/
-          # Azure Oryx runs "npm start" by default; make it run node server.js
+          # Azure often skips dot-prefixed dirs when extracting zip; use next_build then symlink at runtime
+          mv .next/standalone/.next .next/standalone/next_build
+          printf '%s\n' '#!/bin/sh' 'cd "$(dirname "$0")"' '[ -d next_build ] && [ ! -L .next ] && [ ! -d .next ] && ln -sfn next_build .next' 'exec node server.js' > .next/standalone/start.sh
+          chmod +x .next/standalone/start.sh
           node -e "
             const fs = require('fs');
             const p = JSON.parse(fs.readFileSync('.next/standalone/package.json', 'utf8'));
             p.scripts = p.scripts || {};
-            p.scripts.start = 'node server.js';
+            p.scripts.start = 'sh start.sh';
             fs.writeFileSync('.next/standalone/package.json', JSON.stringify(p, null, 2));
           "
           echo "Standalone package contents:"
           ls -la .next/standalone
-          ls -la .next/standalone/.next
-          grep -A2 '"scripts"' .next/standalone/package.json || true
           test -f .next/standalone/server.js && echo "server.js OK" || (echo "Missing server.js" && exit 1)
-          test -d .next/standalone/.next && echo ".next OK" || (echo "Missing .next" && exit 1)
+          test -d .next/standalone/next_build && echo "next_build OK" || (echo "Missing next_build" && exit 1)
+          test -f .next/standalone/start.sh && echo "start.sh OK" || (echo "Missing start.sh" && exit 1)
 
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
